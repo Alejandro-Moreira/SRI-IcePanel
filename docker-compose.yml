@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    ports:
+      - '8080:8080'
+    depends_on:
+      - sri-service
+      - vehicle-service
+      - ant-service
+
+  sri-service:
+    build:
+      context: ./backend/sri-service
+    ports:
+      - '8081:8080'
+
+  vehicle-service:
+    build:
+      context: ./backend/vehicle-service
+    ports:
+      - '8082:8080'
+    depends_on:
+      - sri-service
+
+  ant-service:
+    build:
+      context: ./backend/ant-service
+    ports:
+      - '8083:8080'
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
